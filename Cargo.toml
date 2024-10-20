@@ -1,5 +1,5 @@
 [package]
-name = "sensor_lib_mcp4725"
+name = "dac_lib_mcp4725"
 version = "0.1.0"
 edition = "2021"
 authors = ["Jake Goodwin <jakegoodwin@gorge.works>"]
@@ -7,7 +7,7 @@ categories = ["embedded", "no-std" ]
 description = "A driver for the MCP4725 DAC module."
 readme = "README.md"
 keywords = ["embedded-hal-driver", "DAC", "mcp", "analog", "digital"]
-repository = "https://github.com/jake-g00dwin/sensor_lib_mcp4725"
+repository = "https://github.com/jake-g00dwin/dac_lib_mcp4725"
 
 [dependencies]
 embedded-hal = "1.0.0"
