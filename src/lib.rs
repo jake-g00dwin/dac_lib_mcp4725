@@ -50,6 +50,22 @@ impl <I2C: I2c> MCP4725<I2C> {
     pub fn new(i2c: I2C, address: u8) -> Self {
         Self { i2c, address}
     }
+
+    pub fn read
+
+    pub fn fast_write_dac(&mut self, value: u16) -> Result<(), I2C::Error> {
+
+        Ok(())
+    }
+
+    pub fn write_dac(&mut self, value: u16) -> Result<(), I2C::Error> {
+
+        Ok(())
+    }
+
+    pub fn write_dac_eeprom(&mut self, value: u16) -> Result<(), I2C::Error> {
+        Ok(())
+    }
 }
 
 
@@ -88,5 +104,6 @@ mod dac_test {
 
         i2c.done();
     }
+
 
 }
