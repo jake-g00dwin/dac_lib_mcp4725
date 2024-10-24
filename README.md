@@ -14,8 +14,8 @@ memory.
 
 **Connections:**
 
-OUT:: Analog Output voltage
-GND:: Ground
+OUT:: Signal Output Analog voltage
+GND:: Signal Output Ground
 SCL:: I2C Clock
 SDA:: I2C Data
 VCC:: Supply voltage 2.7v to 5.5v
