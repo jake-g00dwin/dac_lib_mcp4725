@@ -94,6 +94,15 @@ impl <I2C: I2c> MCP4725<I2C> {
     }
 
     pub fn write_dac(&mut self, value: u16) -> Result<(), I2C::Error> {
+        let mut bytes: [u8; 3] = [0, 0, 0];
+        bytes[0] |= (CommandBM::WriteDACReg as u8) | (PowerModes::Normal as u8);  
+        bytes[1] |= ((value >> 4) & 0x00FF) as u8;
+        bytes[2] |= ((value << 4) & 0x00F0) as u8; 
+
+        self.i2c.write(
+            self.address,
+            &bytes,
+        )?;
 
         Ok(())
     }
@@ -177,7 +186,6 @@ mod dac_test {
         i2c.done();
     }
 
-
     #[test]
     fn write_fast_mode() {
 
@@ -196,6 +204,31 @@ mod dac_test {
         let mut dac_0 = MCP4725::new(&mut i2c, DEFAULT_ADDR);
         
         let ret = dac_0.fast_write_dac(0xAAA);
+        assert!(ret.is_ok());
+
+        i2c.done();
+    }
+
+
+    #[test]
+    fn write_dac_register() {
+
+        let expectations = [
+            I2cTransaction::write(
+                DEFAULT_ADDR,
+                vec!(
+                    (CommandBM::WriteDACReg as u8)|(PowerModes::Normal as u8),
+                    0xFF,
+                    0xF0
+                ),
+            )
+        ];
+
+
+        let mut i2c = I2cMock::new(&expectations);
+        let mut dac_0 = MCP4725::new(&mut i2c, DEFAULT_ADDR);
+        
+        let ret = dac_0.write_dac(0x0FFF);
         assert!(ret.is_ok());
 
         i2c.done();
