@@ -1,7 +1,6 @@
 //! This file contains the enums representing the availble I2C registers and
 //! commands for the MCP4725 IC.
 
-
 #[repr(u8)]
 #[allow(dead_code)]
 pub enum CommandBM{
