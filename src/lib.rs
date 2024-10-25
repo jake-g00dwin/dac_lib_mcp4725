@@ -108,6 +108,16 @@ impl <I2C: I2c> MCP4725<I2C> {
     }
 
     pub fn write_dac_eeprom(&mut self, value: u16) -> Result<(), I2C::Error> {
+        let mut bytes: [u8; 3] = [0, 0, 0];
+        bytes[0] |= (CommandBM::WriteDACRegEEPROM as u8) | (PowerModes::Normal as u8);  
+        bytes[1] |= ((value >> 4) & 0x00FF) as u8;
+        bytes[2] |= ((value << 4) & 0x00F0) as u8; 
+
+        self.i2c.write(
+            self.address,
+            &bytes
+        )?;
+
         Ok(())
     }
 }
