@@ -74,10 +74,13 @@ pub struct MCP4725<I2C>{
 }
 
 impl <I2C: I2c> MCP4725<I2C> {
+
+    /// Creates a new instance of the MCP4725 structure.
     pub fn new(i2c: I2C, address: u8) -> Self {
         Self { i2c, address}
     }
 
+    /// Reads the DAC register and EEPROM and returns it as a struct
     pub fn read_dac(&mut self) -> Result<DacRead, I2C::Error> {
         let mut bytes: [u8; 5] = [0, 0, 0, 0, 0];
 
@@ -95,6 +98,7 @@ impl <I2C: I2c> MCP4725<I2C> {
         return Ok(dac_read);
     }
 
+    /// Writes the DAC register in fast mode, requires only 3 bytes.
     pub fn fast_write_dac(&mut self, value: u16) -> Result<(), I2C::Error> {
         let mut bytes: [u8; 2] = [0, 0];
         bytes[0] = (FPowerModes::Normal as u8) | ((value>>8) as u8);
@@ -108,6 +112,8 @@ impl <I2C: I2c> MCP4725<I2C> {
         Ok(())
     }
 
+
+    /// Writes the DAC register in normal mode, requires 4 bytes.
     pub fn write_dac(&mut self, value: u16) -> Result<(), I2C::Error> {
         let mut bytes: [u8; 3] = [0, 0, 0];
         bytes[0] |= (CommandBM::WriteDACReg as u8) | (PowerModes::Normal as u8);  
@@ -122,6 +128,7 @@ impl <I2C: I2c> MCP4725<I2C> {
         Ok(())
     }
 
+    /// Writes the DAC register and EEPROM in normal mode, requires 4 bytes.
     pub fn write_dac_eeprom(&mut self, value: u16) -> Result<(), I2C::Error> {
         let mut bytes: [u8; 3] = [0, 0, 0];
         bytes[0] |= (CommandBM::WriteDACRegEEPROM as u8) | (PowerModes::Normal as u8);  
