@@ -21,6 +21,16 @@
 //!     //Device Specific I2C pins()
 //!     let scl = p.PB6;
 //!     let sda = p.PB7;
+//!
+//!     let mut dac_0 = MCP4725::new(&mut i2c, DEFAULT_ADDR);
+//!
+//!     //Set the output to full VCC.
+//!     let ret = dac_0.write_dac(0x0FFF);
+//!
+//!     if !res.is_ok() {
+//!         //TOSS ERROR MSG
+//!     }
+//!
 //! }
 //! ```
 
@@ -48,6 +58,8 @@ pub const JUMPER_ADDR: u8 = 0x63;
 
 pub const MAX_ATTEMPTS: usize = 3;
 
+/// Reflects the data from the DAC when preforming Read operations.
+#[allow(dead_code)]
 pub struct DacRead{
     register: u16,
     eeprom: u16,
@@ -126,7 +138,7 @@ impl <I2C: I2c> MCP4725<I2C> {
 // Tests
 #[cfg(test)]
 mod dac_test {
-    use embedded_hal::i2c::ErrorKind;
+    //use embedded_hal::i2c::ErrorKind;
     use embedded_hal_mock::eh1::i2c::{
         Mock as I2cMock,
         Transaction as I2cTransaction,

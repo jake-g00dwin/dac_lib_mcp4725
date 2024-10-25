@@ -47,9 +47,10 @@ cargo test
 ## Roadmap
 
 - [X] Define all Bitmasks for registers.
-- [ ] Add Example usage documentation.
+- [X] Add Example usage documentation.
 - [ ] Add link to example usage repo
 - [ ] Ensure Async compat
+- [ ] Add helper functions to map 12bit values to voltage ranges.
 
 ## Contributing
 
