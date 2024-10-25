@@ -233,4 +233,28 @@ mod dac_test {
 
         i2c.done();
     }
+
+    #[test]
+    fn write_dac_register_and_eeprom() {
+
+        let expectations = [
+            I2cTransaction::write(
+                DEFAULT_ADDR,
+                vec!(
+                    (CommandBM::WriteDACRegEEPROM as u8)|(PowerModes::Normal as u8),
+                    0xFF,
+                    0xF0
+                ),
+            )
+        ];
+
+
+        let mut i2c = I2cMock::new(&expectations);
+        let mut dac_0 = MCP4725::new(&mut i2c, DEFAULT_ADDR);
+        
+        let ret = dac_0.write_dac_eeprom(0x0FFF);
+        assert!(ret.is_ok());
+
+        i2c.done();
+    }
 }
