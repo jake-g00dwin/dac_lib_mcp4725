@@ -18,9 +18,12 @@
 //! fn main() -> ! {
 //!     /*--SNIP--*/
 //!
-//!     //Device Specific I2C pins()
+//!     //Device Specific I2C pins(ch32v203kxt6)
 //!     let scl = p.PB6;
 //!     let sda = p.PB7;
+//!
+//!     let i2c_config = hal::Config::default();
+//!     let i2c = I2c::new_blocking(p.I2C1, scl, sda, Hertz::hz(100_000), Default::default());
 //!
 //!     let mut dac_0 = MCP4725::new(&mut i2c, DEFAULT_ADDR);
 //!
