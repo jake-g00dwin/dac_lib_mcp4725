@@ -48,7 +48,8 @@ cargo test
 
 - [X] Define all Bitmasks for registers.
 - [ ] Add Example usage documentation.
-- [ ] 
+- [ ] Add link to example usage repo
+- [ ] Ensure Async compat
 
 ## Contributing
 
