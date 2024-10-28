@@ -101,7 +101,7 @@ impl <I2C: I2c> MCP4725<I2C> {
     /// Writes the DAC register in fast mode, requires only 3 bytes.
     pub fn fast_write_dac(&mut self, value: u16) -> Result<(), I2C::Error> {
         let mut bytes: [u8; 2] = [0, 0];
-        bytes[0] = (FPowerModes::Normal as u8) | ((value>>8) as u8);
+        bytes[0] = (FPowerModes::Normal as u8) & ((value>>8) as u8);
         bytes[1] = (0x0F & value) as u8;
 
         self.i2c.write(
@@ -116,7 +116,7 @@ impl <I2C: I2c> MCP4725<I2C> {
     /// Writes the DAC register in normal mode, requires 4 bytes.
     pub fn write_dac(&mut self, value: u16) -> Result<(), I2C::Error> {
         let mut bytes: [u8; 3] = [0, 0, 0];
-        bytes[0] |= (CommandBM::WriteDACReg as u8) | (PowerModes::Normal as u8);  
+        bytes[0] |= (CommandBM::WriteDACReg as u8) & (PowerModes::Normal as u8);  
         bytes[1] |= ((value >> 4) & 0x00FF) as u8;
         bytes[2] |= ((value << 4) & 0x00F0) as u8; 
 
@@ -131,7 +131,7 @@ impl <I2C: I2c> MCP4725<I2C> {
     /// Writes the DAC register and EEPROM in normal mode, requires 4 bytes.
     pub fn write_dac_eeprom(&mut self, value: u16) -> Result<(), I2C::Error> {
         let mut bytes: [u8; 3] = [0, 0, 0];
-        bytes[0] |= (CommandBM::WriteDACRegEEPROM as u8) | (PowerModes::Normal as u8);  
+        bytes[0] |= (CommandBM::WriteDACRegEEPROM as u8) & (PowerModes::Normal as u8);  
         bytes[1] |= ((value >> 4) & 0x00FF) as u8;
         bytes[2] |= ((value << 4) & 0x00F0) as u8; 
 
@@ -227,7 +227,7 @@ mod dac_test {
         let expectations = [
             I2cTransaction::write(
                 DEFAULT_ADDR,
-                vec!((FPowerModes::Normal as u8)| 0x0A , 0xA),
+                vec!((FPowerModes::Normal as u8)& 0x0A , 0xA),
             )
         ];
 
@@ -249,7 +249,7 @@ mod dac_test {
             I2cTransaction::write(
                 DEFAULT_ADDR,
                 vec!(
-                    (CommandBM::WriteDACReg as u8)|(PowerModes::Normal as u8),
+                    (CommandBM::WriteDACReg as u8)&(PowerModes::Normal as u8),
                     0xFF,
                     0xF0
                 ),
@@ -273,7 +273,7 @@ mod dac_test {
             I2cTransaction::write(
                 DEFAULT_ADDR,
                 vec!(
-                    (CommandBM::WriteDACRegEEPROM as u8)|(PowerModes::Normal as u8),
+                    (CommandBM::WriteDACRegEEPROM as u8)&(PowerModes::Normal as u8),
                     0xFF,
                     0xF0
                 ),
