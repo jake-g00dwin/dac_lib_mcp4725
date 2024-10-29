@@ -1,6 +1,11 @@
 # dac_lib_mcp4725
 A rust library for the MCP4725 DAC module
 
+## Current State
+
+The library has been tested manally using a breakout board and 3.3v input for
+the supply. Output for 4095 yields near full voltage on the output pin.
+
 ## Description
 
 The MCP4725 is a 12bit Digital to Analog converter with built in EEPROM 
@@ -50,11 +55,9 @@ cargo test
 - [X] Add Example usage documentation.
 - [ ] Add link to example usage repo
 - [ ] Ensure Async compat
-- [ ] Add helper functions to map 12bit values to voltage ranges.
 
 ## Contributing
 
 If you want to contribute to it feel free to open up a pull-request or make a 
 new github issue.
-
 
