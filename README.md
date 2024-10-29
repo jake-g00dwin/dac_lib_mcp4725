@@ -3,7 +3,7 @@ A rust library for the MCP4725 DAC module
 
 ## Current State
 
-The library has been tested manally using a breakout board and 3.3v input for
+The library has been tested manually using a breakout board and 3.3v input for
 the supply. Output for 4095 yields near full voltage on the output pin.
 
 ## Description
@@ -55,10 +55,14 @@ cargo test
 - [X] Add Example usage documentation.
 - [ ] Add link to example usage repo
 - [ ] Ensure Async compat
-- [ ] Add parameters for selecting powerdown modes.
+- [ ] Add parameters for selecting power down modes.
 
 ## Contributing
 
 If you want to contribute to it feel free to open up a pull-request or make a 
 new github issue.
 
+## License
+
+This is published under the BSD-3-Clause license. So you can pretty much
+do whatever you want with it for business stuff or anything else.
