@@ -117,7 +117,7 @@ impl <I2C: I2c> MCP4725<I2C> {
     /// Writes the DAC register in normal mode, requires 4 bytes.
     pub fn write_dac(&mut self, value: u16) -> Result<(), I2C::Error> {
         let mut bytes: [u8; 3] = [0, 0, 0];
-        bytes[0] |= (Command::WriteDACReg as u8) & (PowerModes::Normal as u8);  
+        bytes[0] |= (Command::WriteDACReg as u8) | (PowerModes::Normal as u8);  
         bytes[1] |= ((value >> 4) & 0x00FF) as u8;
         bytes[2] |= ((value << 4) & 0x00F0) as u8; 
 
@@ -261,7 +261,7 @@ mod dac_test {
             I2cTransaction::write(
                 DEFAULT_ADDR,
                 vec!(
-                    (Command::WriteDACReg as u8)&(PowerModes::Normal as u8),
+                    (Command::WriteDACReg as u8)|(PowerModes::Normal as u8),
                     0xFF,
                     0xF0
                 ),
