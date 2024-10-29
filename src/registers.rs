@@ -5,7 +5,7 @@
 #[repr(u8)]
 #[allow(dead_code)]
 pub enum Command{
-    FastWrite = 0x3F, // 00x* , we only care that the first two msb are zero
+    FastWrite = 0x00, // 00x* , we only care that the first two msb are zero
     WriteDACReg = 0x40, // 010
     WriteDACRegEEPROM = 0x60, // Writes DAC and EEPROM
 }
