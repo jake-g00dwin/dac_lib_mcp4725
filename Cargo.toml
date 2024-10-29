@@ -7,6 +7,7 @@ categories = ["embedded", "no-std" ]
 description = "A driver for the MCP4725 DAC module."
 readme = "README.md"
 keywords = ["embedded-hal-driver", "DAC", "mcp", "analog", "digital"]
+license = "BSD-3-Clause"
 repository = "https://github.com/jake-g00dwin/dac_lib_mcp4725"
 
 [dependencies]
