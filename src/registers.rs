@@ -4,10 +4,10 @@
 /// Command bitmasks, see datasheet page 18/19 for details
 #[repr(u8)]
 #[allow(dead_code)]
-pub enum CommandBM{
+pub enum Command{
     FastWrite = 0x3F, // 00x* , we only care that the first two msb are zero
-    WriteDACReg = 0x5F, // 010
-    WriteDACRegEEPROM = 0x7F, // Writes DAC and EEPROM
+    WriteDACReg = 0x40, // 010
+    WriteDACRegEEPROM = 0x60, // Writes DAC and EEPROM
 }
 
 /// FPowerModes are for when writing using Fast mode.
