@@ -55,6 +55,7 @@ cargo test
 - [X] Add Example usage documentation.
 - [ ] Add link to example usage repo
 - [ ] Ensure Async compat
+- [ ] Add parameters for selecting powerdown modes.
 
 ## Contributing
 
