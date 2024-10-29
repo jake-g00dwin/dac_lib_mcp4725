@@ -47,14 +47,15 @@ use embedded_hal::i2c::I2c;
 mod registers;
 #[allow(unused_imports)]
 pub use crate::registers::{
-    CommandBM,
+    Command,
     FPowerModes,
     PowerModes,
 };
 
 
-/// The default address
-pub const DEFAULT_ADDR: u8 = 0x62;
+/// The default address, depends on factory programming
+/// and the configuration via the address pin.
+pub const DEFAULT_ADDR: u8 = 0x60;
 
 /// The address for jumpered units
 pub const JUMPER_ADDR: u8 = 0x63;
@@ -101,8 +102,8 @@ impl <I2C: I2c> MCP4725<I2C> {
     /// Writes the DAC register in fast mode, requires only 3 bytes.
     pub fn fast_write_dac(&mut self, value: u16) -> Result<(), I2C::Error> {
         let mut bytes: [u8; 2] = [0, 0];
-        bytes[0] = (FPowerModes::Normal as u8) & ((value>>8) as u8);
-        bytes[1] = (0x0F & value) as u8;
+        bytes[0] = (FPowerModes::Normal as u8) | ((value>>8) as u8);
+        bytes[1] = (0x00FF & value) as u8;
 
         self.i2c.write(
             self.address,
@@ -116,7 +117,7 @@ impl <I2C: I2c> MCP4725<I2C> {
     /// Writes the DAC register in normal mode, requires 4 bytes.
     pub fn write_dac(&mut self, value: u16) -> Result<(), I2C::Error> {
         let mut bytes: [u8; 3] = [0, 0, 0];
-        bytes[0] |= (CommandBM::WriteDACReg as u8) & (PowerModes::Normal as u8);  
+        bytes[0] |= (Command::WriteDACReg as u8) & (PowerModes::Normal as u8);  
         bytes[1] |= ((value >> 4) & 0x00FF) as u8;
         bytes[2] |= ((value << 4) & 0x00F0) as u8; 
 
@@ -131,7 +132,7 @@ impl <I2C: I2c> MCP4725<I2C> {
     /// Writes the DAC register and EEPROM in normal mode, requires 4 bytes.
     pub fn write_dac_eeprom(&mut self, value: u16) -> Result<(), I2C::Error> {
         let mut bytes: [u8; 3] = [0, 0, 0];
-        bytes[0] |= (CommandBM::WriteDACRegEEPROM as u8) & (PowerModes::Normal as u8);  
+        bytes[0] |= (Command::WriteDACRegEEPROM as u8) & (PowerModes::Normal as u8);  
         bytes[1] |= ((value >> 4) & 0x00FF) as u8;
         bytes[2] |= ((value << 4) & 0x00F0) as u8; 
 
@@ -221,13 +222,24 @@ mod dac_test {
     #[test]
     fn write_fast_mode() {
 
+        // BYTE 1(Addressing)
+        // BYTE 2(Fastmode cmd, Power down select, data bits D8-D11)
+        // BYTE 3(Data bits D0-D7)
+        // ACK
+
+        //address 0x60
+        //should give 0b110_0000 0b0000_1010 0b1010_1010
+        //in decimal 192, 10, 170
+
         //The two MSB in the first byte are zero for fast mode.
         //The next two bits are for the Powerdown selection
         //The rest of the bits are for the DAC register
         let expectations = [
             I2cTransaction::write(
                 DEFAULT_ADDR,
-                vec!((FPowerModes::Normal as u8)& 0x0A , 0xA),
+                vec!((FPowerModes::Normal as u8) | 0x0A ,
+                0xAA
+                ),
             )
         ];
 
@@ -249,7 +261,7 @@ mod dac_test {
             I2cTransaction::write(
                 DEFAULT_ADDR,
                 vec!(
-                    (CommandBM::WriteDACReg as u8)&(PowerModes::Normal as u8),
+                    (Command::WriteDACReg as u8)&(PowerModes::Normal as u8),
                     0xFF,
                     0xF0
                 ),
@@ -273,7 +285,7 @@ mod dac_test {
             I2cTransaction::write(
                 DEFAULT_ADDR,
                 vec!(
-                    (CommandBM::WriteDACRegEEPROM as u8)&(PowerModes::Normal as u8),
+                    (Command::WriteDACRegEEPROM as u8)&(PowerModes::Normal as u8),
                     0xFF,
                     0xF0
                 ),
